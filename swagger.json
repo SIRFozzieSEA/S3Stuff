@@ -1,0 +1,181 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Sample app for S3 operations",
+    "version": "1.0.0",
+    "title": "s3imageapp",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "v-scossette@expediagroup.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "localhost:3333",
+  "basePath": "/v1",
+  "tags": [
+    {
+      "name": "s3imageapp",
+      "description": "Sample app for S3 operations"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/s3imageapp": {
+      "get": {
+        "summary": "Lists all objects in a bucket",
+        "operationId": "listObject",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ObjectList"
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Uploads objects to a bucket",
+        "operationId": "uploadObject",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file to upload",
+            "required": false,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
+          "500": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          }
+        }
+      }
+    },
+    "/s3imageapp/file/{objectKey}": {
+      "delete": {
+        "summary": "Deletes object from a bucket",
+        "operationId": "deleteObject",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "objectKey",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
+          "500": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Downloads object from a bucket",
+        "operationId": "downloadObject",
+        "produces": [
+          "image/jpeg",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "objectKey",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "file"
+            }
+          },
+          "500": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Message": {
+      "type": "object",
+      "properties": {
+        "Message": {
+          "type": "string",
+          "example": "This is a sample message"
+        }
+      }
+    },
+    "ObjectList": {
+      "type": "object",
+      "properties": {
+        "ObjectKey": {
+          "type": "string",
+          "example": "bobo/bobo.jpg"
+        },
+        "ObjectName": {
+          "type": "string",
+          "example": "bobo.jpg"
+        },
+        "Bucket": {
+          "type": "string",
+          "example": "elasticbeanstalk-us-east-1-066902780383"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
